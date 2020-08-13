@@ -1,0 +1,42 @@
+\vspace{-10pt}\resizebox{0.9\linewidth}{!}{\begin{tikzpicture}[node distance=2cm]
+	\tikzset{
+	    bigN/.style={draw,circle,minimum width=0.3cm,inner sep=0},
+	    smallN/.style={draw,circle,minimum width=0.3cm,inner sep=0} 
+	}
+	\node[bigN] (1) at (0,0) {} 
+		node[smallN,fill=red] at (1.center) {}
+		node at (1.south) [below] {$S$};
+	\node[smallN] (3) at (1.5,0.65) {};
+	\node[smallN] (2) at (2,-1) {};
+	\node[smallN] (4) at (3,-0.5) {};
+	\node[smallN] (5) at (3.5,0.25) {};
+	\node[smallN] (6) at (4.5,-1.5) {};
+	\node[smallN] (7) at (5,1) {};
+	
+	\node[smallN,dashed] (8)  at (6,2.5) {};
+	\node[smallN,dashed] (9) at (6,-1.7) {};
+	\node[smallN,dashed] (10) at (7,0.5) {};
+	
+	\draw (1) -- (2);
+	\draw (1) -- (3);
+	\draw (1) -- (4);
+	\draw (1) -- (5);
+	\draw[thick] (1) -- (6);
+	\draw[thick] (1) -- (7);
+	
+	\fill[pattern=custom north west lines,hatchcolor=red] 
+		  (-30:5cm) -- (-30:5.5cm)
+	      arc (-30:30:5.5cm) -- (30:4.5cm)
+	      arc (30:-30:4.5cm) -- cycle;
+	\fill[red] 
+		  (-30:5.5cm) -- (-30:6cm)
+	      arc (-30:30:6cm) -- (30:5.5cm)
+	      arc (30:-30:5.5cm) -- cycle;
+	\draw[red] (1) -- (-30:6cm) 
+		node [pos=0.82,below,sloped] {\textit{refill}};
+	\draw[red] (1) -- (30:6cm)
+			node [pos=0.4,above,sloped] {Range of the vehicle}
+			node [pos=0.98,above,sloped] {\textit{critical}};
+	\node[anchor=base west] at ($(-30:6cm) +(0:0.2cm)$) {\textit{Out-of reach}};
+\end{tikzpicture}}
+\vspace{-5pt}

@@ -1,0 +1,377 @@
+\documentclass[a4paper,11pt,twoside]{memoir}
+\usepackage{fontspec}
+\usepackage{enumitem}
+\usepackage[english]{babel}
+\usepackage[usenames, dvipsnames]{xcolor}
+\usepackage[font=footnotesize]{caption}
+\usepackage{url}
+\usepackage[super]{nth}
+\usepackage[font=footnotesize]{subcaption}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage[plain,vlined,resetcount,algochapter]{algorithm2e}
+\usepackage{wrapfig}
+\usepackage{amsfonts}
+\usepackage{xspace}
+\usepackage{tocloft}
+\usepackage{nicefrac}
+\usepackage{csquotes}
+\usepackage{adforn}
+\usepackage{hyperref}
+\usepackage{sidecap}
+\usepackage{natbib}
+\usepackage{imakeidx}
+\usepackage{changepage}
+\makeindex[columns=2, title=Alphabetical index, intoc]
+\usepackage{array,multirow,colortbl,bigdelim,hhline}
+\usepackage{bigstrut}
+    \setlength\bigstrutjot{2pt}
+
+%\usepackage{subfig}
+\usepackage{subcaption}
+\usepackage[font=small,labelfont=bf]{caption}
+
+\setcounter{secnumdepth}{3}
+\usepackage[margin=28mm,includeheadfoot,bindingoffset=10mm]{geometry}
+\usepackage[acronym,toc,style=super]{glossaries}
+
+\makeglossaries
+\setlength{\glsdescwidth}{0.8\textwidth}
+\renewcommand*{\glsgroupskip}{\vspace{5pt}}
+\newcommand\s{\kern1px}
+
+\RequirePackage{tikz}
+\usetikzlibrary{calc,positioning,shapes,shadows,arrows,fit,decorations.pathreplacing,backgrounds,matrix,patterns}
+\usepackage{tikz-qtree}
+
+% defining the new dimensions and parameters
+\newlength{\hatchspread}
+\newlength{\hatchthickness}
+\newlength{\hatchshift}
+\newcommand{\hatchcolor}{}
+% declaring the keys in tikz
+\tikzset{hatchspread/.code={\setlength{\hatchspread}{#1}},
+         hatchthickness/.code={\setlength{\hatchthickness}{#1}},
+         hatchshift/.code={\setlength{\hatchshift}{#1}},% must be >= 0
+         hatchcolor/.code={\renewcommand{\hatchcolor}{#1}}}
+% setting the default values
+\tikzset{hatchspread=3pt,
+         hatchthickness=0.4pt,
+         hatchshift=0pt,% must be >= 0
+         hatchcolor=black}
+% declaring the pattern
+\pgfdeclarepatternformonly[\hatchspread,\hatchthickness,\hatchshift,\hatchcolor]% variables
+   {custom north west lines}% name
+   {\pgfqpoint{\dimexpr-2\hatchthickness}{\dimexpr-2\hatchthickness}}% lower left corner
+   {\pgfqpoint{\dimexpr\hatchspread+2\hatchthickness}{\dimexpr\hatchspread+2\hatchthickness}}% upper right corner
+   {\pgfqpoint{\dimexpr\hatchspread}{\dimexpr\hatchspread}}% tile size
+   {% shape description
+    \pgfsetlinewidth{\hatchthickness}
+    \pgfpathmoveto{\pgfqpoint{0pt}{\dimexpr\hatchspread+\hatchshift}}
+    \pgfpathlineto{\pgfqpoint{\dimexpr\hatchspread+0.15pt+\hatchshift}{-0.15pt}}
+    \ifdim \hatchshift > 0pt
+      \pgfpathmoveto{\pgfqpoint{0pt}{\hatchshift}}
+      \pgfpathlineto{\pgfqpoint{\dimexpr0.15pt+\hatchshift}{-0.15pt}}
+    \fi
+    \pgfsetstrokecolor{\hatchcolor}
+%    \pgfsetdash{{1pt}{1pt}}{0pt}% dashing cannot work correctly in all situation this way
+    \pgfusepath{stroke}
+   }
+
+
+% \geometry{verbose,tmargin=2cm,bmargin=2.5cm,lmargin=2.5cm,rmargin=2.5cm,headheight=.5cm,footskip=1.5cm}
+
+\setlrmargins{*}{*}{1.5}
+
+\setmarginnotes{6pt}{6pc}{12pt}
+\sideparmargin{outer}
+\checkandfixthelayout
+\setlength{\parindent}{0pt}
+\setlist{nolistsep,noitemsep}
+% \setlist{leftmargin=*}
+\setlength{\parskip}{\medskipamount}
+\setlength{\itemsep}{1pt}
+\setlength{\parsep}{0pt}
+  
+\definecolor{gray75}{gray}{0.75}
+\definecolor{gray50}{gray}{0.50}
+\definecolor{chaptercolor}{gray}{0.8}
+\colorlet{partcolor}{black!30!}
+\definecolor{darkblue}{HTML}{1d2287}
+
+\newcommand{\hsp}{\hspace{0.2em}}
+\newcommand{\eg}{\textit{e.g.},\xspace}
+\newcommand{\ie}{\textit{i.e.},\xspace}
+\newcommand{\etal}{\textit{et al.}\xspace}
+
+\newcommand{\Comma}{\mathbin{\raisebox{0.5ex}{,}}}
+
+\renewcommand\thefigure{\arabic{figure}}
+\captionsetup[figure]{labelfont=bf,labelsep=period}
+\usepackage{chngcntr}
+\counterwithin{figure}{chapter}
+\renewcommand\thesubfigure{\alph{subfigure}}
+\setlength{\bibsep}{6pt plus 0.3ex}
+
+\newcommand{\com}[1]{\textcolor{red!60!black}{\sffamily [\textit{#1}]}}
+\def\changemargin#1#2{\list{}{\rightmargin#2\leftmargin#1}\item[]}
+\let\endchangemargin=\endlist 
+
+\usepackage{etoolbox}
+\appto\appendix{\addtocontents{toc}{\protect\setcounter{tocdepth}{0}}}
+
+% reinstate the correct level for list of tables and figures
+\appto\listoffigures{\addtocontents{lof}{\protect\setcounter{tocdepth}{1}}}
+\appto\listoftables{\addtocontents{lot}{\protect\setcounter{tocdepth}{1}}}
+
+
+
+\makeatletter
+% \renewcommand{\@algocf@capt@plain}{above}% formerly {bottom}
+
+%%% Custom sectioning (titlesec package)
+\usepackage[explicit]{titlesec}
+\titleformat{\section}%
+  [hang]% shape
+  {\normalfont\Large\itshape\bfseries}% format applied to label+text
+  {\llap{\hspace*{-20pt}\thesection\hsp\textcolor{partcolor}{|}\hsp}}% label
+  {0pt}% horizontal separation between label and title body
+  {#1}% before the title body
+  []% after the title body
+
+%%% Part style %%%
+\titleformat{\part}[display]
+{\normalfont\filcenter\thispagestyle{empty}}
+{}{0pt}{
+\vfill
+\begingroup
+    \sffamily
+    \fontsize{75pt}{40pt}\selectfont\bfseries
+    \color{partcolor}
+    \thepart
+\endgroup
+\sffamily\Huge\color{black}
+\linebreak
+#1
+\linebreak
+\vfill
+}[]
+
+%%% Subsection numbering %%%
+\titleformat{\subsection}%
+  [hang]% <shape>
+  {\normalfont\bfseries\large}% <format>
+  {\thesubsection. }% <label>
+  {0pt}% <sep>
+  {#1}% <before code>
+\titlespacing*{\subsection}{0pt}{5pt}{0pt}[0pt]
+
+%%% Paragraph spacing fix %%%
+\renewcommand{\paragraph}{%
+  \@startsection{paragraph}{4}%
+  {\z@}{1.5ex \@plus 1ex \@minus .2ex}{-0.5em}%
+  {\normalfont\normalsize\bfseries}%
+}
+\makeatother
+ 
+%This is ShareLaTeX Specific (or if the fonts are not installed in your system)
+%-----------------------------------------------------------------------
+% Times New Roman
+\setromanfont[
+Path=./fonts/,
+BoldFont=MinionPro-Bold.otf,
+ItalicFont=MinionPro-It.otf,
+BoldItalicFont=MinionPro-BoldIt.otf,
+]{MinionPro-Regular.otf}
+% Arial
+\setsansfont[
+Path=./fonts/,
+Scale=0.90,
+BoldFont=HelveticaNeueLTPro-Md.otf,
+ItalicFont=HelveticaNeueLTPro-LtIt.otf,
+BoldItalicFont=HelveticaNeueLTPro-MdIt.otf
+]{HelveticaNeueLTPro-Lt.otf}
+% Courier New
+\setmonofont[
+Path=fonts/,
+Scale=0.75,
+BoldFont=Menlo-Bold.ttf,
+ItalicFont=Menlo-Italic.ttf,
+BoldItalicFont=Menlo-BoldItalic.ttf
+]{Menlo-Regular.ttf}
+%-----------------------------------------------------------------------
+ 
+%%% Chapter style %%%
+% helper macros
+\newcommand\numlifter[1]{\raisebox{-1.5cm}[0pt][0pt]{\smash{#1}}}
+\newcommand\numindent{\kern37pt}
+\newlength\chaptertitleboxheight
+\makechapterstyle{hansen}{
+  \renewcommand\printchaptername{\raggedleft}
+  \renewcommand\printchapternum{%
+    \begingroup%
+    \leavevmode%
+    \chapnumfont%
+    \strut%
+    \numlifter{\thechapter}%
+    \numindent%
+\endgroup%
+}
+  \renewcommand*{\printchapternonum}{%
+    \vphantom{\begingroup%
+      \leavevmode%
+      \chapnumfont%
+      \numlifter{\vphantom{9}}%
+      \numindent%
+      \endgroup}
+    \afterchapternum}
+  \setlength\midchapskip{0pt}
+  \setlength\beforechapskip{0.5\baselineskip}
+  \setlength{\afterchapskip}{1.5\baselineskip}
+  \renewcommand\chapnumfont{%
+    \fontsize{4cm}{0cm}%
+    \bfseries%
+    \sffamily%
+    \color{partcolor}%
+  }
+  \renewcommand\chaptitlefont{%
+    \sffamily%
+    \huge%
+    \raggedleft%
+  }%
+  \settototalheight\chaptertitleboxheight{%
+    \parbox{\textwidth}{\chaptitlefont \strut bg\\bg\strut}}
+  \renewcommand\printchaptertitle[1]{%
+    \parbox[t][\chaptertitleboxheight][t]{\textwidth}{%
+      %\microtypesetup{protrusion=false}% add this if you use microtype
+      \chaptitlefont\strut ##1\strut}%
+}}
+\chapterstyle{hansen}
+\aliaspagestyle{chapter}{empty} % just to save some space
+
+\hyphenation{sto-ckage na-vi-ga-tion se-conde corres-pond fi-gure ut-ili-sa-teurs li-mi-ter maxi-mise maxi-miser}
+\newcommand{\bb}[1]{\textbf{#1}}
+\newcommand{\ii}[1]{\textit{#1}}
+\newcommand{\nn}[1]{#1n}
+\newcommand{\blankpage}{
+\newpage
+\thispagestyle{empty}%
+\vspace*{\fill}
+\begin{center}
+	{\large \textit{This page intentionally left blank}\par}%
+\end{center}
+\vfill % equivalent to \vspace{\fill}
+\newpage
+}
+%% Elements for the algorithm2e package
+\DontPrintSemicolon
+\SetFuncSty{textsf} 
+\SetArgSty{textrm}
+\SetKwFunction{MaxMin}{Max-Min Fairness}
+\SetKwFunction{MCF}{MCF}
+\SetKwFunction{Throu}{MaxThroughput}
+\SetKwFunction{Alloc}{Allocation}
+\SetKwFunction{NBT}{Non-Blocking Test}
+\SetKwFor{Func}{Function}{:}{End func}
+\SetKwFor{Proc}{Procedure}{:}{End proc}
+\SetKw{KwAnd}{and}
+\SetKw{KwOr}{or}
+
+\newlength\mylen
+\newcommand\myinput[1]{%
+  \settowidth\mylen{\KwIn{}}%
+  \setlength\hangindent{\mylen}%
+  \hspace*{\mylen}#1\\}
+
+\usepackage[framemethod=TikZ]{mdframed}
+\newenvironment{mybox}[2][]{%
+\ifstrempty{#1}%
+{\mdfsetup{%
+frametitle={%
+\tikz[baseline=(current bounding box.east),outer sep=0pt]
+\node[anchor=east,rectangle,color=white,fill=white] (X)
+{\strut};}}
+}%
+{\mdfsetup{%
+frametitle={%
+\tikz[baseline=(X.base)]
+\node[color=partcolor,inner sep=0pt,outer sep=0pt,fill=white] (X)
+{\strut\large\hspace*{5pt}\textit{#1}\hspace*{5pt}};}}%
+}%
+\mdfsetup{innertopmargin=0pt,linecolor=partcolor,%
+linewidth=1.25pt,topline=true,%
+leftmargin=-5pt,rightmargin=-5pt,%
+innerleftmargin=4.25pt,innerrightmargin=4.25pt,%
+usetwoside=false,innerbottommargin=10pt,%
+frametitleaboveskip=\dimexpr-\ht\strutbox\relax
+}
+\begin{mdframed}[]\relax%
+\label{#2}}{\end{mdframed}}
+
+\XeTeXinterchartokenstate=1
+\newXeTeXintercharclass \aposclass
+\XeTeXcharclass `’ \aposclass
+\XeTeXinterchartoks \aposclass 0 = {\kern0pt }
+  
+\begin{document}
+
+\addtocontents{toc}{\protect\vspace{-30pt}\protect\setlength{\parskip}{0pt}\protect\SingleSpacing}
+
+% \frontmatter
+
+\input{0-titre-fr.tex}
+\blankpage
+% \newpage
+\input{0-title-en.tex}
+
+\newgeometry{bottom=1cm}
+\input{0-acknowledgements.tex}
+
+\input{acronyms.tex}
+
+\input{0-abstract-fr.tex}
+\input{0-abstract-en.tex}
+
+\blankpage
+\begingroup
+\setlength{\beforechapskip}{0pt}
+\tableofcontents*
+\endgroup
+
+\blankpage
+
+\restoregeometry
+\pagestyle{plain}
+\pagenumbering{arabic}
+\def\baselinestretch{1.1}
+\normalsize
+
+% \mainmatter
+\input{1-introduction.tex}
+\input{2b-related-work.tex}
+\input{3-feasibility-assessment.tex}
+% \input{4-problem-statement.tex}
+\input{5-data-haulage.tex}
+\input{6-extensions.tex}
+\input{7b-conclusion.tex}
+
+% \backmatter
+\addtocontents{toc}{\protect\setlength{\parskip}{-8pt}\protect\SingleSpacing}
+
+\appendix
+\input{annexes.tex}
+\input{long-abstract-fr.tex}
+
+\def\baselinestretch{1.0}
+\normalsize
+
+\clearpage
+\printglossaries
+
+\clearpage
+\printindex
+
+\bibliographystyle{alpha}
+\bibliography{bibliography.bib}
+
+\end{document}
